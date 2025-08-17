@@ -4,43 +4,63 @@ import re
 import html
 import pandas as pd
 import numpy as np
+import gzip
+from io import StringIO
 from rapidfuzz import process, fuzz
 
 def data_loader(filename: str, source: str = "raw"):
     """
-    Load a CSV dataset from the repo's data/raw or data/preprocessed folder.
-    
-    Parameters:
-        filename: str - the CSV file name (can be compressed .zip or .gz)
-        source: str - "raw" or "preprocessed" to select folder
-    
-    Returns:
-        pd.DataFrame
+    Data loader that handles:
+    - Corrupted/mislabeled GZIP files
+    - Encoding issues
+    - Multiple compression formats
     """
+    # Validate source and find file
     if source not in ["raw", "preprocessed"]:
         raise ValueError("source must be 'raw' or 'preprocessed'")
 
     cwd = os.getcwd()
     repo_root = cwd
-
-    # Walk upwards until we find the desired folder
     while True:
         data_path = os.path.join(repo_root, "data", source, filename)
         if os.path.exists(data_path):
             break
         parent = os.path.dirname(repo_root)
-        if parent == repo_root:  # reached root of filesystem
+        if parent == repo_root:
             raise FileNotFoundError(f"Could not find {filename} in data/{source} from {cwd}")
         repo_root = parent
 
-    # Detect compression type
-    compression_type = None
-    if filename.endswith('.zip'):
-        compression_type = 'zip'
-    elif filename.endswith('.gz'):
-        compression_type = 'gzip'
-
-    return pd.read_csv(data_path, compression=compression_type)
+    # Special handling for problematic GZIP files
+    if filename.endswith(('.gz', '.gzip')):
+        try:
+            # Method 1: Try standard pandas reading
+            return pd.read_csv(data_path, compression='gzip', encoding='utf-8')
+        except:
+            try:
+                # Method 2: Manual gzip decompression with encoding fallback
+                with gzip.open(data_path, 'rb') as f:
+                    content = f.read().decode('latin1')
+                return pd.read_csv(StringIO(content))
+            except:
+                # Method 3: Binary read and manual cleanup
+                with open(data_path, 'rb') as f:
+                    content = f.read()
+                    # Skip GZIP header if present
+                    if content.startswith(b'\x1f\x8b'):
+                        content = gzip.decompress(content)
+                    return pd.read_csv(StringIO(content.decode('latin1')))
+    
+    # Handle other file types
+    elif filename.endswith('.zip'):
+        return pd.read_csv(data_path, compression='zip')
+    else:
+        # Try multiple encodings for regular CSV
+        for encoding in ['utf-8', 'latin1', 'iso-8859-1', 'cp1252']:
+            try:
+                return pd.read_csv(data_path, encoding=encoding)
+            except UnicodeDecodeError:
+                continue
+        raise ValueError("Failed to decode file with any supported encoding")
 
 def parse_time(t):
     """
