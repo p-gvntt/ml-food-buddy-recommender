@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from config import PREPROCESSED_PATH, VECTORIZER_FILE, VECTORS_FILE
+from src.config import PREPROCESSED_PATH, VECTORIZER_FILE, VECTORS_FILE
 import os
 
 def train_and_save_vectorizer():
