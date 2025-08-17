@@ -1,0 +1,6 @@
+# This directory contains raw data files required for the pipeline
+# Download the dataset from:
+# - https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews
+# The file to download is:
+# - recipes.csv (704.21 MB)
+# Place it in this directory before running the preprocessing scripts

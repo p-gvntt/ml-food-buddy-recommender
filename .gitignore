@@ -11,7 +11,7 @@ venv/
 .vscode/
 .DS_Store
 
-data/raw/
+data/raw/recipes.csv
 models/recipe_vectors.npy
 models/tfidf_vectorizer.pkl
 data/preprocessed/final_recipes.csv.gzip
