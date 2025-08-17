@@ -307,23 +307,34 @@ def calorie_bin(cals):
 
 def get_first_url(cell):
     """
-    Extract the first URL from a string that contains one or more URLs enclosed in quotes.
-
+    Extract the first URL from a string, trying multiple methods.
+    
     Parameters:
-        cell (str or any): A string containing URLs in quotes, or any value (e.g., NaN).
-
+        cell (str or any): Input that might contain URLs
+        
     Returns:
-        str or None: 
-            - The first URL found in quotes.
-            - None if no URL is found or if the input is NaN.
-
+        str or None: First found URL or None
     """
     if pd.isna(cell):
-        return None
+        return 'Image not available'
+        
     text = str(cell)
-    match = re.search(r'"(.*?)"', text)
-    if match:
-        return match.group(1)
+    
+    # Try 1: Look for properly quoted URLs first
+    quoted_url = re.search(r'"(https?://[^"]*)"', text)
+    if quoted_url:
+        return quoted_url.group(1)
+    
+    # Try 2: Look for any URL pattern without quotes
+    any_url = re.search(r'(https?://\S+)', text)
+    if any_url:
+        return any_url.group(1)
+    
+    # Try 3: Look for common image extensions without full URL
+    common_ext = re.search(r'(\S+\.(?:jpg|jpeg|png|gif|webp)\b)', text, re.IGNORECASE)
+    if common_ext:
+        return common_ext.group(1)
+        
     return None
 
 def apply_categorical_filters(dataset, filters: dict):
