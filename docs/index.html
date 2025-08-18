@@ -3,10 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Food Buddy Demo</title>
+  <style>
+    /* Reset default margin/padding */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;  /* Full viewport height */
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    video {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      max-width: 90%; /* responsive */
+      height: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <h1>Food Buddy Demo</h1>
-  <video width="600" controls>
+  <video controls>
     <source src="media/demo.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
