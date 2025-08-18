@@ -72,6 +72,7 @@ def preprocess_and_save():
         'Name',
         'Image_first',
         'recipe_instructions_clean',
+        'ingredients_clean',
         'Calories',
         'combined_text',
         'TotalTime_min',
