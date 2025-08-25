@@ -114,7 +114,7 @@ http://127.0.0.1:8000/recommend?query=pasta%20with%20eggs&&top_n=3
 ```
 ml-food-buddy-recommender/
 ├── api/
-│   └── main.py                  # FastAPI ap
+│   └── main.py                  # FastAPI
 ├── app/
 │   └── app.py                   # Main Streamlit web application
 ├── data/
