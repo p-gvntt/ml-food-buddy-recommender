@@ -91,10 +91,30 @@ An intelligent recipe recommendation system that helps users discover personaliz
    streamlit run app/app.py
    ```
 
+10. **Launch the API**
+
+Ready to get cooking? Let's fire up the API!
+
+```bash
+uvicorn api.main:app --reload
+```
+
+Once it's running, you'll see your API come to life at `http://127.0.0.1:8000` ✨
+
+### Try it out!
+
+Here's a sample request to get you started - let's find some quick, pasta with eggs recipes:
+
+```
+http://127.0.0.1:8000/recommend?query=pasta%20with%20eggs&&top_n=3
+```
+
 ## 📁 Project Structure
 
 ```
 ml-food-buddy-recommender/
+├── api/
+│   └── main.py                  # FastAPI
 ├── app/
 │   └── app.py                   # Main Streamlit web application
 ├── data/
@@ -183,7 +203,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🙏 Acknowledgments
 
 - Dataset provided by [Food.com Recipes and Reviews](https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews)
-- Built with Python, scikit-learn, pandas, and Streamlit
+- Built with Python, scikit-learn, pandas, FastAPI, and Streamlit
 - Uses RapidFuzz for intelligent query correction
 
 Buon appetito! 👨‍🍳👩‍🍳
